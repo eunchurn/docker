@@ -1,5 +1,7 @@
 FROM ksachdeva17/dlib
 
+LABEL maintainer="Kapil Sachdeva <ksachdeva17@gmail.com>"
+
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 6.12.0
 
