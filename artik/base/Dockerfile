@@ -7,6 +7,9 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
+    pkg-config \    
+    software-properties-common \    
+    zip \
     wget \
     automake \
     cmake \
