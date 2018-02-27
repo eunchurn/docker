@@ -1,0 +1,1 @@
+arm64xc-user ALL=(ALL:ALL) NOPASSWD: ALL

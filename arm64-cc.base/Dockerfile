@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 LABEL maintainer="Kapil Sachdeva <ksachdeva17@gmail.com>"
 
@@ -22,20 +22,20 @@ RUN apt-get update \
     xz-utils
 
 ENV HOST=aarch64-linux-gnu \
-    TOOLCHAIN=gcc-linaro-aarch64-linux-gnu \
-    ARXC_ROOT=/arxc    
+    TOOLCHAIN=gcc-linaro-aarch64-linux-gnu \    
+    ARM64XC_ROOT=/arm64xc    
 
-WORKDIR $ARXC_ROOT
+WORKDIR $ARM64XC_ROOT
 
 RUN wget https://releases.linaro.org/components/toolchain/binaries/latest-5/aarch64-linux-gnu/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz \
     && tar -xvf gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz \
     && mv gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu $TOOLCHAIN
 
 ENV ARCH=aarch64 \
-    CROSS_COMPILE=$ARXC_ROOT/$TOOLCHAIN/bin/$HOST- \
-    PATH=$ARXC_ROOT/$TOOLCHAIN/bin:$PATH 
+    CROSS_COMPILE=$ARM64XC_ROOT/$TOOLCHAIN/bin/$HOST- \
+    PATH=$ARM64XC_ROOT/$TOOLCHAIN/bin:$PATH 
 
 COPY image/ /
 
 WORKDIR /build
-ENTRYPOINT [ "/arxc/entrypoint.sh" ] 
+ENTRYPOINT [ "/arm64xc/entrypoint.sh" ] 
