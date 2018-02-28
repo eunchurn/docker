@@ -40,6 +40,7 @@ RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c '\
 
 RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c '\
     DEBIAN_FRONTEND=noninteractive apt install -y libartik-sdk-dev \
+    && DEBIAN_FRONTEND=noninteractive apt install -y zlib1g-dev \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev'    
 
 RUN mkdir -p $ARM64XC_ROOT/cmake-toolchains
