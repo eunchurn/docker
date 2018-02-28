@@ -11,8 +11,7 @@ RUN apt-get update \
     software-properties-common \    
     zip \
     wget \
-    automake \
-    cmake \
+    automake \    
     curl \
     fakeroot \    
     git \
@@ -20,6 +19,13 @@ RUN apt-get update \
     runit \
     sudo \
     xz-utils
+
+RUN mkdir -p /temp
+WORKDIR /temp
+
+RUN wget --progress=bar:force https://cmake.org/files/v3.10/cmake-3.10.2-Linux-x86_64.sh -O cmake-install.sh
+RUN chmod +x cmake-install.sh
+RUN ./cmake-install.sh --skip-license --prefix=/usr
 
 ENV HOST=aarch64-linux-gnu \
     TOOLCHAIN=gcc-linaro-aarch64-linux-gnu \    
