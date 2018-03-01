@@ -22,7 +22,6 @@ RUN tar xvf v1.20.tar.gz -C .
 RUN cp -r leveldb-1.20 $SYSROOT/usr/src/.
 RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c 'apt-get install -y build-essential'
 RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c 'cd /usr/src/leveldb-1.20 && make out-static/libleveldb.a'
-RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c 'apt-get remove -y libleveldb-dev'
 RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c 'cd /usr/src/leveldb-1.20 && cp out-static/lib* /usr/local/lib'
 RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c 'cd /usr/src/leveldb-1.20 && cp -r include/leveldb /usr/local/include'
 
