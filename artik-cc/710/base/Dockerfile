@@ -2,6 +2,8 @@ FROM ksachdeva17/arm64-cc.base:latest
 
 LABEL maintainer="Kapil Sachdeva <ksachdeva17@gmail.com>"
 
+COPY image/ /
+
 ENV SYSROOT=$ARM64XC_ROOT/sysroot 
 ENV QEMU_PATH=/usr/bin/qemu-aarch64-static
 ENV QEMU_EXECVE=1
@@ -46,11 +48,7 @@ RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c '\
 RUN cp -rf $SYSROOT/usr/lib/aarch64-linux-gnu/pkgconfig/* $SYSROOT/usr/lib/pkgconfig
 
 # Fix symlinks
-RUN mkdir -p $ARM64XC_ROOT/temp
-WORKDIR $ARM64XC_ROOT/temp
-RUN wget https://raw.githubusercontent.com/alpqr/fixsymlinks_tx1/master/fixsymlinks.sh
-RUN chmod +x fixsymlinks.sh
-RUN ./fixsymlinks.sh $SYSROOT
+RUN fixsymlinks $SYSROOT
 
 # Copy the toolchain file
 RUN mkdir -p $ARM64XC_ROOT/cmake-toolchains
