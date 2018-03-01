@@ -33,9 +33,11 @@ ENV HOST=aarch64-linux-gnu \
 
 WORKDIR $ARM64XC_ROOT
 
-RUN wget https://releases.linaro.org/components/toolchain/binaries/latest-5/aarch64-linux-gnu/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz \
-    && tar -xvf gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz \
-    && mv gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu $TOOLCHAIN
+#RUN wget https://releases.linaro.org/components/toolchain/binaries/latest-5/aarch64-linux-gnu/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz \
+
+RUN wget https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11/aarch64-linux-gnu/gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz \
+    && tar -xvf gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz \
+    && mv gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu $TOOLCHAIN
 
 ENV ARCH=aarch64 \
     CROSS_COMPILE=$ARM64XC_ROOT/$TOOLCHAIN/bin/$HOST- \
