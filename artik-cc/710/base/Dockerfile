@@ -41,10 +41,19 @@ RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c '\
 RUN chroot $SYSROOT $QEMU_PATH /bin/sh -c '\
     DEBIAN_FRONTEND=noninteractive apt install -y libartik-sdk-dev \
     && DEBIAN_FRONTEND=noninteractive apt install -y zlib1g-dev \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev'    
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev'  
 
-RUN mkdir -p $ARM64XC_ROOT/cmake-toolchains
+RUN cp -rf $SYSROOT/usr/lib/aarch64-linux-gnu/pkgconfig/* $SYSROOT/usr/lib/pkgconfig
+
+# Fix symlinks
+RUN mkdir -p $ARM64XC_ROOT/temp
+WORKDIR $ARM64XC_ROOT/temp
+RUN wget https://raw.githubusercontent.com/alpqr/fixsymlinks_tx1/master/fixsymlinks.sh
+RUN chmod +x fixsymlinks.sh
+RUN ./fixsymlinks.sh $SYSROOT
+
 # Copy the toolchain file
+RUN mkdir -p $ARM64XC_ROOT/cmake-toolchains
 WORKDIR $ARM64XC_ROOT/cmake-toolchains
 COPY toolchain-710.cmake .
 
