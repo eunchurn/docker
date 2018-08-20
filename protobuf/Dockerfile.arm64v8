@@ -2,6 +2,8 @@ FROM arm64v8/ubuntu:xenial as protobuf-builder
 
 ARG PROTOBUF_VERSION=3.5.1
 
+ADD qemu-aarch64-static /usr/bin
+
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y --fix-missing \
     build-essential \
@@ -44,6 +46,8 @@ RUN cd protobuf-$PROTOBUF_VERSION && checkinstall \
     --pkgversion=$checkinstall_package_version
 
 FROM arm64v8/busybox:latest
+
+ADD qemu-aarch64-static /usr/bin
 
 ENV PKG_DIR /root/.package-installers
 
