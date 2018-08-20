@@ -1,0 +1,52 @@
+FROM arm64v8/ubuntu:xenial as protobuf-builder
+
+ARG PROTOBUF_VERSION=3.5.1
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y --fix-missing \
+    build-essential \
+    nano \
+    git \    
+    unzip \    
+    wget \
+    curl \
+    pkg-config \
+    zip \
+    checkinstall \   
+    cmake \    
+    && apt-get clean && rm -rf /tmp/* /var/tmp/*
+
+ENV PKG_DIR /root/.package-installers
+
+RUN mkdir -p ${PKG_DIR}
+
+# Build protobuf
+RUN wget https://github.com/google/protobuf/releases/download/v$PROTOBUF_VERSION/protobuf-cpp-$PROTOBUF_VERSION.tar.gz \
+&& tar xvf protobuf-cpp-$PROTOBUF_VERSION.tar.gz \
+&& cd protobuf-$PROTOBUF_VERSION && ./configure --prefix=/usr && make -j4
+
+ENV checkinstall_package_maintainer "name@email.com"
+ENV checkinstall_package_summary "Protobuf $PROTOBUF_VERSION"
+ENV checkinstall_package_name  "protobuf-custom"
+ENV checkinstall_package_license "MIT"
+ENV checkinstall_package_dir ${PKG_DIR}
+ENV checkinstall_package_release "1"
+ENV checkinstall_package_version $PROTOBUF_VERSION
+
+# Make the installer for protobuf
+RUN cd protobuf-$PROTOBUF_VERSION && checkinstall \
+    -y \
+    --pkgrelease=$checkinstall_package_release \
+    --pkgname=$checkinstall_package_name       \
+    --pkglicense=$checkinstall_package_license \
+    --maintainer=$checkinstall_package_maintainer \
+    --pakdir=$checkinstall_package_dir \    
+    --pkgversion=$checkinstall_package_version
+
+FROM arm64v8/busybox:latest
+
+ENV PKG_DIR /root/.package-installers
+
+RUN mkdir -p ${PKG_DIR}
+
+COPY --from=protobuf-builder /root/.package-installers ${PKG_DIR}
